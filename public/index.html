@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stillnote Affirmations</title>
+    <script>
+      document.documentElement.dataset.theme = localStorage.getItem("stillnote.theme") || "light";
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">SN</span>
+          <div>
+            <strong>Stillnote</strong>
+            <span>Daily affirmations</span>
+          </div>
+        </div>
+
+        <section class="account-panel" aria-label="Account">
+          <div>
+            <span id="accountEyebrow">Your space</span>
+            <strong id="accountName">Guest</strong>
+          </div>
+          <button class="text-button" id="accountActionButton" data-view-target="settings" type="button">Log in</button>
+        </section>
+
+        <nav class="nav-list">
+          <button class="nav-button active" data-view-target="today" type="button">
+            <span aria-hidden="true">+</span>
+            Today
+          </button>
+          <button class="nav-button" data-view-target="audio" type="button">
+            <span aria-hidden="true">&gt;</span>
+            Daily Audio
+          </button>
+          <button class="nav-button" data-view-target="journal" type="button">
+            <span aria-hidden="true">#</span>
+            Journal
+          </button>
+          <button class="nav-button" data-view-target="chat" type="button">
+            <span aria-hidden="true">*</span>
+            Sanctuary
+          </button>
+          <button class="nav-button" data-view-target="support" type="button">
+            <span aria-hidden="true">~</span>
+            Support
+          </button>
+          <button class="nav-button" data-view-target="quiz" type="button">
+            <span aria-hidden="true">?</span>
+            Quiz
+          </button>
+          <button class="nav-button" data-view-target="membership" type="button">
+            <span aria-hidden="true">$</span>
+            Membership
+          </button>
+          <button class="nav-button" data-view-target="settings" type="button">
+            <span aria-hidden="true">=</span>
+            Settings
+          </button>
+        </nav>
+
+        <div class="trial-panel">
+          <span>7 day trial</span>
+          <strong id="trialDays">Ready to begin</strong>
+          <button class="text-button" data-view-target="membership" type="button">View plans</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="hero-panel" aria-labelledby="appTitle">
+          <img src="assets/wellness-header.png" alt="Sunlit notebook beside a cup and plant" />
+          <div class="hero-overlay">
+            <div class="eyebrow">Personal affirmation practice</div>
+            <h1 id="appTitle">Stillnote</h1>
+            <p>Begin with one steady sentence. Leave the rest of your thoughts somewhere kind.</p>
+            <button class="primary-button" data-view-target="quiz" type="button">Find my affirmation style</button>
+          </div>
+        </section>
+
+        <section class="view is-visible" id="todayView" aria-labelledby="todayHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Today</p>
+              <h2 id="todayHeading">Your daily affirmation</h2>
+            </div>
+            <button class="secondary-button" id="newAffirmationButton" type="button">Refresh</button>
+          </div>
+
+          <div class="today-grid">
+            <article class="affirmation-card">
+              <div class="match-pill" id="profilePill">Balanced</div>
+              <blockquote id="dailyAffirmation"></blockquote>
+              <div class="affirmation-actions">
+                <button class="primary-button" id="saveAffirmationButton" type="button">Save affirmation</button>
+                <button class="secondary-button" data-view-target="journal" type="button">Write thoughts</button>
+                <button class="secondary-button" data-view-target="chat" type="button">Talk with Mira</button>
+                <button class="secondary-button" data-view-target="support" type="button">Need support</button>
+              </div>
+            </article>
+
+            <article class="checkin-card">
+              <h3>Feeling check-in</h3>
+              <div class="mood-row" role="radiogroup" aria-label="Mood">
+                <button class="mood-button active" data-mood="soft" type="button">Soft</button>
+                <button class="mood-button" data-mood="heavy" type="button">Heavy</button>
+                <button class="mood-button" data-mood="clear" type="button">Clear</button>
+                <button class="mood-button" data-mood="tender" type="button">Tender</button>
+              </div>
+              <label class="field-label" for="quickThought">One thought</label>
+              <textarea id="quickThought" rows="5" placeholder="What is present right now?"></textarea>
+              <div class="prompt-chip-row" aria-label="Quick prompts">
+                <button class="prompt-chip" data-quick-prompt="I need permission to" type="button">Permission</button>
+                <button class="prompt-chip" data-quick-prompt="The kindest next step is" type="button">Next step</button>
+                <button class="prompt-chip" data-quick-prompt="I am grateful for" type="button">Gratitude</button>
+              </div>
+              <button class="primary-button full-width" id="quickSaveButton" type="button">Save check-in</button>
+            </article>
+          </div>
+
+          <div class="insight-strip">
+            <div>
+              <span class="metric" id="entryCount">0</span>
+              <p>journal entries</p>
+            </div>
+            <div>
+              <span class="metric" id="savedCount">0</span>
+              <p>saved affirmations</p>
+            </div>
+            <div>
+              <span class="metric" id="supportCount">0</span>
+              <p>support moments</p>
+            </div>
+            <div>
+              <span class="metric" id="reminderCount">0</span>
+              <p>reminders sent</p>
+            </div>
+            <div>
+              <span class="metric" id="planLabel">Trial</span>
+              <p>current access</p>
+            </div>
+          </div>
+
+          <section class="badge-section" aria-labelledby="badgeHeading">
+            <div class="card-heading">
+              <h3 id="badgeHeading">Badges earned</h3>
+              <span id="badgeCount">0 unlocked</span>
+            </div>
+            <div class="badge-grid" id="badgeGrid"></div>
+          </section>
+        </section>
+
+        <section class="view" id="audioView" aria-labelledby="audioHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Daily audio</p>
+              <h2 id="audioHeading">Guided affirmations</h2>
+            </div>
+            <button class="secondary-button" id="refreshAudioAffirmationButton" type="button">New session</button>
+          </div>
+
+          <div class="audio-layout">
+            <article class="audio-card" aria-label="Daily affirmation audio player">
+              <div class="audio-stage" aria-hidden="true">
+                <div class="audio-orb">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <div class="audio-player-copy">
+                <span class="status-chip" id="audioProfilePill">Balanced</span>
+                <h3>Press start, settle in, and listen.</h3>
+                <p id="affirmationAudioStatus">Your daily affirmation will play with a clear voice and soft nature sound.</p>
+              </div>
+              <div class="audio-controls">
+                <button class="primary-button" id="startAudioAffirmationButton" type="button">Start</button>
+                <button class="secondary-button" id="pauseAudioAffirmationButton" type="button">Pause</button>
+                <button class="secondary-button" id="stopAudioAffirmationButton" type="button">Stop</button>
+              </div>
+            </article>
+
+            <aside class="audio-settings-card" aria-label="Audio affirmation settings">
+              <h3>Listening settings</h3>
+              <label class="field-label" for="affirmationVoiceSelect">Voice</label>
+              <select id="affirmationVoiceSelect">
+                <option value="auto">Best available realistic voice</option>
+                <option value="rowan">Rowan - slow natural male</option>
+                <option value="atlas">Atlas - deep calm male</option>
+                <option value="luna">Luna - slow natural female</option>
+                <option value="sienna">Sienna - soft meditation female</option>
+              </select>
+              <p class="voice-quality-note" id="audioVoiceQuality">Stillnote will use the most natural voice installed on this device.</p>
+
+              <label class="field-label" for="ambienceSelect">Nature background</label>
+              <select id="ambienceSelect">
+                <option value="forest">Forest rain</option>
+                <option value="forestBirds">Forest birds</option>
+                <option value="ocean">Ocean waves</option>
+                <option value="night">Night calm</option>
+                <option value="wind">Soft wind</option>
+                <option value="creek">Gentle creek</option>
+                <option value="waterfall">Distant waterfall</option>
+                <option value="meadow">Morning birds</option>
+                <option value="thunder">Soft thunder rain</option>
+                <option value="lake">Lake shore</option>
+                <option value="leaves">Leaves and breeze</option>
+              </select>
+
+              <label class="field-label" for="voiceVolume">Voice volume</label>
+              <div class="volume-control">
+                <input id="voiceVolume" min="30" max="100" step="5" type="range" value="100" />
+                <span id="voiceVolumeLabel">100%</span>
+              </div>
+
+              <label class="field-label" for="natureVolume">Background volume</label>
+              <div class="volume-control">
+                <input id="natureVolume" min="0" max="100" step="5" type="range" value="80" />
+                <span id="natureVolumeLabel">80%</span>
+              </div>
+              <button class="secondary-button full-width" id="previewNatureButton" type="button">Preview nature sound</button>
+
+              <div class="audio-session-meta">
+                <span>Session length</span>
+                <strong>About 3 minutes</strong>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="journalView" aria-labelledby="journalHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Journal</p>
+              <h2 id="journalHeading">Thoughts and feelings</h2>
+            </div>
+            <button class="secondary-button" id="clearJournalButton" type="button">Clear draft</button>
+          </div>
+
+          <div class="journal-layout">
+            <form class="journal-form" id="journalForm">
+              <label class="field-label" for="journalMood">Mood</label>
+              <select id="journalMood">
+                <option value="steady">Steady</option>
+                <option value="anxious">Anxious</option>
+                <option value="hopeful">Hopeful</option>
+                <option value="drained">Drained</option>
+                <option value="grateful">Grateful</option>
+              </select>
+
+              <label class="field-label" for="journalPrompt">Prompt</label>
+              <select id="journalPrompt"></select>
+
+              <label class="field-label" for="journalText">Entry</label>
+              <textarea id="journalText" rows="12" placeholder="I am noticing..."></textarea>
+              <div class="prompt-chip-row" aria-label="Journal starters">
+                <button class="prompt-chip" data-journal-insert="My body feels" type="button">Body</button>
+                <button class="prompt-chip" data-journal-insert="What I wish someone understood is" type="button">Understood</button>
+                <button class="prompt-chip" data-journal-insert="One thing I can control is" type="button">Control</button>
+                <button class="prompt-chip" data-journal-insert="I want to remember that" type="button">Remember</button>
+              </div>
+
+              <button class="primary-button" type="submit">Save entry</button>
+            </form>
+
+            <article class="entries-card">
+              <div class="card-heading">
+                <h3>Recent entries</h3>
+                <span id="lastSaved">No entries yet</span>
+              </div>
+              <div class="entries-list" id="entriesList"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="chatView" aria-labelledby="chatHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Sanctuary</p>
+              <h2 id="chatHeading">Mira, your private companion</h2>
+            </div>
+            <div class="header-actions">
+              <button class="secondary-button" id="saveChatInsightButton" type="button">Save insight</button>
+              <button class="secondary-button" id="clearChatButton" type="button">Clear chat</button>
+            </div>
+          </div>
+
+          <div class="chat-layout">
+            <section class="chat-panel" aria-label="Conversation">
+              <div class="safe-note">
+                <strong>A softer place to say it plainly.</strong>
+                <span>Mira replies with care, remembers your affirmation style, and gives extra safety guidance when something needs real human support.</span>
+              </div>
+              <div class="chat-log" id="chatLog" aria-live="polite"></div>
+              <form class="chat-form" id="chatForm">
+                <label class="field-label" for="chatInput">Message</label>
+                <div class="chat-input-row">
+                  <textarea id="chatInput" rows="3" placeholder="Tell me what you need support with right now."></textarea>
+                  <button class="secondary-button icon-action" id="voiceMessageButton" type="button" aria-label="Record voice message">Voice</button>
+                  <button class="primary-button" type="submit">Send</button>
+                </div>
+                <p class="voice-status" id="voiceStatus">Voice notes stay in this local prototype.</p>
+              </form>
+            </section>
+
+            <aside class="chat-side" aria-label="Chat options">
+              <article class="chat-side-card">
+                <h3>Voice chat</h3>
+                <label class="field-label" for="voiceSelect">Choose a voice</label>
+                <select id="voiceSelect">
+                  <option value="auto">Best available realistic voice</option>
+                  <option value="rowan">Rowan - slow natural male</option>
+                  <option value="atlas">Atlas - deep calm male</option>
+                  <option value="luna">Luna - slow natural female</option>
+                  <option value="sienna">Sienna - soft meditation female</option>
+                </select>
+                <div class="voice-actions">
+                  <button class="secondary-button" id="playVoiceButton" type="button">Play reply</button>
+                  <button class="secondary-button" id="stopVoiceButton" type="button">Stop</button>
+                </div>
+              </article>
+
+              <article class="chat-side-card">
+                <h3>Quick meditations</h3>
+                <div class="meditation-list">
+                  <button class="meditation-option" data-meditation="morning" type="button">
+                    <strong>Morning</strong>
+                    <span>3 min</span>
+                  </button>
+                  <button class="meditation-option" data-meditation="reset" type="button">
+                    <strong>Reset</strong>
+                    <span>4 min</span>
+                  </button>
+                  <button class="meditation-option" data-meditation="nap" type="button">
+                    <strong>Nap</strong>
+                    <span>5 min</span>
+                  </button>
+                  <button class="meditation-option" data-meditation="bedtime" type="button">
+                    <strong>Bedtime</strong>
+                    <span>5 min</span>
+                  </button>
+                </div>
+              </article>
+
+              <article class="chat-side-card">
+                <h3>Start with</h3>
+                <div class="chat-suggestions">
+                  <button class="prompt-chip" data-chat-prompt="I feel overwhelmed and need help slowing down." type="button">Overwhelmed</button>
+                  <button class="prompt-chip" data-chat-prompt="Can you help me reframe a thought that keeps looping?" type="button">Reframe</button>
+                  <button class="prompt-chip" data-chat-prompt="I need a gentle affirmation for self-worth." type="button">Self-worth</button>
+                  <button class="prompt-chip" data-chat-prompt="Help me choose one tiny next step." type="button">Next step</button>
+                </div>
+              </article>
+
+              <article class="chat-side-card">
+                <h3>Chat style</h3>
+                <div class="tone-row" id="chatToneRow" role="radiogroup" aria-label="Chat tone">
+                  <button class="tone-button active" data-chat-tone="gentle" type="button">Gentle</button>
+                  <button class="tone-button" data-chat-tone="grounded" type="button">Grounded</button>
+                  <button class="tone-button" data-chat-tone="clear" type="button">Clear</button>
+                </div>
+              </article>
+
+              <article class="chat-side-card">
+                <h3>Personalized by</h3>
+                <p id="chatProfileNote">Your current affirmation style shapes the chat responses.</p>
+              </article>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="supportView" aria-labelledby="supportHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Support</p>
+              <h2 id="supportHeading">Steady care</h2>
+            </div>
+            <button class="secondary-button" id="saveSupportButton" type="button">Save moment</button>
+          </div>
+
+          <div class="support-grid">
+            <article class="support-card breath-card">
+              <div class="card-heading">
+                <h3>Breathing reset</h3>
+              </div>
+              <div class="breath-orb" id="breathOrb" aria-live="polite">
+                <span class="breath-instruction" id="breathPhase">Ready</span>
+                <span class="breath-count" id="breathCount">4</span>
+                <span class="breath-helper">Follow the circle</span>
+              </div>
+              <div class="support-actions">
+                <button class="primary-button" id="breathButton" type="button">Begin</button>
+                <button class="secondary-button" id="breathResetButton" type="button">Reset</button>
+              </div>
+            </article>
+
+            <article class="support-card">
+              <div class="card-heading">
+                <h3>Grounding</h3>
+                <span id="groundingCount">0 of 5</span>
+              </div>
+              <div class="check-list" id="groundingList">
+                <label><input type="checkbox" value="see" /> See</label>
+                <label><input type="checkbox" value="feel" /> Feel</label>
+                <label><input type="checkbox" value="hear" /> Hear</label>
+                <label><input type="checkbox" value="smell" /> Smell</label>
+                <label><input type="checkbox" value="taste" /> Taste</label>
+              </div>
+            </article>
+
+            <article class="support-card">
+              <div class="card-heading">
+                <h3>Care plan</h3>
+                <span id="careCount">0 selected</span>
+              </div>
+              <div class="care-options" id="careOptions">
+                <button class="care-option" data-care="Drink water" type="button">Drink water</button>
+                <button class="care-option" data-care="Step outside" type="button">Step outside</button>
+                <button class="care-option" data-care="Stretch" type="button">Stretch</button>
+                <button class="care-option" data-care="Rest eyes" type="button">Rest eyes</button>
+                <button class="care-option" data-care="Tidy one spot" type="button">Tidy one spot</button>
+                <button class="care-option" data-care="Ask for help" type="button">Ask for help</button>
+              </div>
+            </article>
+
+            <article class="support-card">
+              <div class="card-heading">
+                <h3>Support note</h3>
+                <button class="text-button" id="copySupportNoteButton" type="button">Copy</button>
+              </div>
+              <label class="field-label" for="supportNote">Message</label>
+              <textarea id="supportNote" rows="7" placeholder="I could use a little support today."></textarea>
+            </article>
+
+            <article class="support-card affirmation-library">
+              <div class="card-heading">
+                <h3>Saved affirmations</h3>
+                <span id="libraryCount">0 saved</span>
+              </div>
+              <div class="library-list" id="affirmationLibrary"></div>
+            </article>
+
+            <article class="support-card support-history">
+              <div class="card-heading">
+                <h3>Recent support</h3>
+                <span id="supportLastSaved">No moments yet</span>
+              </div>
+              <div class="entries-list" id="supportList"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="quizView" aria-labelledby="quizHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Quiz</p>
+              <h2 id="quizHeading">Affirmation match</h2>
+            </div>
+            <button class="secondary-button" id="resetQuizButton" type="button">Retake</button>
+          </div>
+
+          <form class="quiz-form" id="quizForm">
+            <fieldset>
+              <legend>Current situation</legend>
+              <label><input type="radio" name="situation" value="restore" required /> I am stretched thin and need relief.</label>
+              <label><input type="radio" name="situation" value="courage" /> I am entering a change or decision.</label>
+              <label><input type="radio" name="situation" value="belonging" /> I am healing from self-criticism.</label>
+              <label><input type="radio" name="situation" value="momentum" /> I am building consistency.</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Biggest struggle</legend>
+              <label><input type="radio" name="struggle" value="belonging" required /> Doubting my worth.</label>
+              <label><input type="radio" name="struggle" value="restore" /> Feeling overwhelmed.</label>
+              <label><input type="radio" name="struggle" value="courage" /> Speaking up for myself.</label>
+              <label><input type="radio" name="struggle" value="momentum" /> Staying focused on my goals.</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Lifestyle rhythm</legend>
+              <label><input type="radio" name="lifestyle" value="restore" required /> Busy days, little quiet time.</label>
+              <label><input type="radio" name="lifestyle" value="momentum" /> Goal-oriented and active.</label>
+              <label><input type="radio" name="lifestyle" value="belonging" /> Sensitive, reflective, emotionally aware.</label>
+              <label><input type="radio" name="lifestyle" value="courage" /> Independent and in transition.</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Preferred tone</legend>
+              <label><input type="radio" name="tone" value="gentle" required /> Gentle and reassuring.</label>
+              <label><input type="radio" name="tone" value="clear" /> Clear and grounding.</label>
+              <label><input type="radio" name="tone" value="bold" /> Brave and energizing.</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Energy right now</legend>
+              <label><input type="radio" name="energy" value="restore" required /> Low and needing softness.</label>
+              <label><input type="radio" name="energy" value="momentum" /> Ready for structure.</label>
+              <label><input type="radio" name="energy" value="courage" /> Nervous but willing.</label>
+              <label><input type="radio" name="energy" value="belonging" /> Sensitive and open-hearted.</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Support style</legend>
+              <label><input type="radio" name="supportStyle" value="belonging" required /> Remind me I am enough.</label>
+              <label><input type="radio" name="supportStyle" value="restore" /> Help me calm my body.</label>
+              <label><input type="radio" name="supportStyle" value="courage" /> Help me speak clearly.</label>
+              <label><input type="radio" name="supportStyle" value="momentum" /> Help me follow through.</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>When affirmations matter most</legend>
+              <label><input type="radio" name="timing" value="momentum" required /> Morning focus.</label>
+              <label><input type="radio" name="timing" value="restore" /> Midday reset.</label>
+              <label><input type="radio" name="timing" value="belonging" /> Emotional moments.</label>
+              <label><input type="radio" name="timing" value="courage" /> Before hard conversations.</label>
+            </fieldset>
+
+            <button class="primary-button" type="submit">Reveal my match</button>
+          </form>
+
+          <article class="result-card" id="quizResult" hidden>
+            <div class="match-pill" id="resultType">Balanced</div>
+            <h3 id="resultTitle"></h3>
+            <p id="resultSummary"></p>
+            <blockquote id="resultSample"></blockquote>
+            <button class="secondary-button" data-view-target="today" type="button">See today's affirmation</button>
+          </article>
+        </section>
+
+        <section class="view" id="membershipView" aria-labelledby="membershipHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Membership</p>
+              <h2 id="membershipHeading">Start with 7 days free</h2>
+            </div>
+            <span class="status-chip" id="selectedPlanStatus">No plan selected</span>
+          </div>
+
+          <div class="pricing-grid" id="pricingGrid">
+            <article class="price-card" data-plan="weekly">
+              <div class="price-topline">
+                <span>Weekly</span>
+                <strong>Save 50%</strong>
+              </div>
+              <div class="regular-price">Was $7.99</div>
+              <h3>$3.99</h3>
+              <div class="discount-note">Trial offer price</div>
+              <p>Flexible access after the free trial.</p>
+              <button class="primary-button" type="button">Start trial</button>
+            </article>
+            <article class="price-card" data-plan="monthly">
+              <div class="price-topline">
+                <span>Monthly</span>
+                <strong>Save 40%</strong>
+              </div>
+              <div class="regular-price">Was $19.99</div>
+              <h3>$11.99</h3>
+              <div class="discount-note">Discounted monthly rate</div>
+              <p>A steady monthly affirmation practice.</p>
+              <button class="primary-button" type="button">Start trial</button>
+            </article>
+            <article class="price-card featured" data-plan="sixMonth">
+              <div class="price-topline">
+                <span>6 month</span>
+                <strong>Save 50%</strong>
+              </div>
+              <div class="regular-price">Was $119.99</div>
+              <h3>$59.99</h3>
+              <div class="discount-note">Limited reset offer</div>
+              <p>Lower monthly cost for a longer reset.</p>
+              <button class="primary-button" type="button">Start trial</button>
+            </article>
+            <article class="price-card" data-plan="annual">
+              <div class="price-topline">
+                <span>Annual</span>
+                <strong>Save 55%</strong>
+              </div>
+              <div class="regular-price">Was $199.99</div>
+              <h3>$89.99</h3>
+              <div class="discount-note">Best discounted value</div>
+              <p>The best value for ongoing support.</p>
+              <button class="primary-button" type="button">Start trial</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="settingsView" aria-labelledby="settingsHeading">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">Settings</p>
+              <h2 id="settingsHeading">Account settings</h2>
+            </div>
+            <span class="status-chip" id="settingsStatus">Saved locally</span>
+          </div>
+
+          <div class="settings-layout">
+            <form class="settings-card account-settings-card" id="loginForm">
+              <div class="card-heading">
+                <h3>Account</h3>
+                <span id="loginStatus">Not logged in</span>
+              </div>
+              <label class="field-label" for="loginName">Name</label>
+              <input id="loginName" type="text" placeholder="Your name" />
+              <label class="field-label" for="loginEmail">Email</label>
+              <input id="loginEmail" type="text" placeholder="you@example.com" />
+              <button class="primary-button full-width" type="submit">Log in</button>
+              <button class="secondary-button full-width" id="logoutButton" type="button">Log out</button>
+              <p class="settings-copy">Your activity, badges, and preferences are saved locally for this prototype.</p>
+            </form>
+
+            <article class="settings-card">
+              <div class="card-heading">
+                <h3>Theme</h3>
+                <span id="themeStatus">Light</span>
+              </div>
+              <div class="theme-toggle" id="themeToggle" role="radiogroup" aria-label="Theme">
+                <button class="theme-button active" data-theme-choice="light" type="button">Light</button>
+                <button class="theme-button" data-theme-choice="dark" type="button">Dark</button>
+              </div>
+            </article>
+
+            <article class="settings-card">
+              <div class="card-heading">
+                <h3>Language</h3>
+                <span id="languageStatus">English</span>
+              </div>
+              <label class="field-label" for="languageSelect">App language</label>
+              <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="zh">Chinese</option>
+                <option value="hi">Hindi</option>
+                <option value="ar">Arabic</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="ja">Japanese</option>
+                <option value="ko">Korean</option>
+                <option value="it">Italian</option>
+                <option value="tr">Turkish</option>
+                <option value="vi">Vietnamese</option>
+                <option value="id">Indonesian</option>
+                <option value="th">Thai</option>
+                <option value="pl">Polish</option>
+                <option value="uk">Ukrainian</option>
+                <option value="nl">Dutch</option>
+                <option value="sv">Swedish</option>
+                <option value="he">Hebrew</option>
+                <option value="el">Greek</option>
+                <option value="ro">Romanian</option>
+                <option value="bn">Bengali</option>
+                <option value="ur">Urdu</option>
+              </select>
+              <p class="settings-copy" id="languagePreview">Stillnote will remember this language preference.</p>
+            </article>
+
+            <form class="settings-card" id="settingsNotificationForm">
+              <div class="card-heading">
+                <h3>Notifications</h3>
+                <span id="notificationStatus">Not enabled</span>
+              </div>
+              <p class="settings-copy" id="settingsNotificationSummary">9:00 AM reminder</p>
+
+              <label class="field-label" for="settingsReminderTime">Daily reminder time</label>
+              <input id="settingsReminderTime" type="time" value="09:00" />
+
+              <div class="field-label">Remind me to</div>
+              <div class="notification-options">
+                <label><input id="settingsNotifyAffirmation" type="checkbox" value="affirmation" /> Read my affirmation</label>
+                <label><input id="settingsNotifyJournal" type="checkbox" value="journal" /> Write a quick journal entry</label>
+                <label><input id="settingsNotifyCare" type="checkbox" value="care" /> Take a care pause</label>
+              </div>
+
+              <label class="toggle-row">
+                <input id="settingsQuietMode" type="checkbox" />
+                <span>Quiet mode: keep reminders inside the app only</span>
+              </label>
+
+              <div class="notification-preview settings-preview" id="notificationPreview"></div>
+              <p class="notification-note">Browser notifications work while Stillnote is open in this prototype. A production app can move this schedule to a backend or service worker.</p>
+
+              <div class="notification-actions">
+                <button class="primary-button" id="enableNotificationsButton" type="button">Enable browser notifications</button>
+                <button class="secondary-button" id="testNotificationButton" type="button">Send test</button>
+                <button class="secondary-button" type="submit">Save settings</button>
+              </div>
+            </form>
+
+            <form class="settings-card" id="paymentForm">
+              <div class="card-heading">
+                <h3>Payment method</h3>
+                <span id="paymentStatus">No card saved</span>
+              </div>
+
+              <label class="field-label" for="paymentName">Name on card</label>
+              <input id="paymentName" type="text" placeholder="Name" />
+
+              <label class="field-label" for="paymentBrand">Card type</label>
+              <select id="paymentBrand">
+                <option value="Visa">Visa</option>
+                <option value="Mastercard">Mastercard</option>
+                <option value="Amex">Amex</option>
+                <option value="Discover">Discover</option>
+              </select>
+
+              <div class="payment-row">
+                <div>
+                  <label class="field-label" for="paymentLast4">Last 4 digits</label>
+                  <input id="paymentLast4" inputmode="numeric" maxlength="4" placeholder="1234" />
+                </div>
+                <div>
+                  <label class="field-label" for="paymentExpiry">Expiry</label>
+                  <input id="paymentExpiry" placeholder="MM/YY" />
+                </div>
+              </div>
+
+              <button class="primary-button full-width" type="submit">Update payment method</button>
+              <button class="secondary-button full-width" id="clearPaymentButton" type="button">Remove payment method</button>
+            </form>
+
+            <article class="settings-card">
+              <div class="card-heading">
+                <h3>Membership</h3>
+                <span id="settingsPlanStatus">Trial</span>
+              </div>
+              <p class="settings-copy">Manage your weekly, monthly, 6 month, or annual membership plan.</p>
+              <button class="secondary-button full-width" data-view-target="membership" type="button">Change plan</button>
+            </article>
+
+            <article class="settings-card settings-history">
+              <div class="card-heading">
+                <h3>Recent reminders</h3>
+                <button class="text-button" id="clearNotificationsButton" type="button">Clear reminders</button>
+              </div>
+              <div class="entries-list" id="notificationLog"></div>
+            </article>
+          </div>
+        </section>
+
+        <footer class="app-download-footer" aria-labelledby="downloadHeading">
+          <div>
+            <p class="kicker">Mobile app</p>
+            <h2 id="downloadHeading">Take Stillnote with you</h2>
+          </div>
+          <div class="download-links footer-download-links">
+            <a class="store-link store-badge" href="https://www.apple.com/app-store/" target="_blank" rel="noreferrer">
+              <svg class="store-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M16.7 12.5c0-2.1 1.7-3.1 1.8-3.2-1-1.5-2.5-1.7-3-1.7-1.3-.1-2.5.7-3.1.7-.7 0-1.7-.7-2.8-.7-1.4 0-2.8.8-3.5 2.1-1.5 2.6-.4 6.4 1.1 8.5.7 1 1.6 2.2 2.7 2.1 1.1 0 1.5-.7 2.8-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.1-2.3 1.1-2.4 0-.1-2.5-1-2.5-3.3ZM14.7 6.3c.6-.7 1-1.6.9-2.6-.9 0-1.9.6-2.5 1.3-.5.6-1 1.6-.9 2.5.9.1 1.9-.5 2.5-1.2Z" />
+              </svg>
+              <span>
+                <small>Download on the</small>
+                App Store
+              </span>
+            </a>
+            <a class="store-link store-badge" href="https://play.google.com/store" target="_blank" rel="noreferrer">
+              <svg class="store-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4.2 3.4c-.3.2-.5.6-.5 1.1v15c0 .5.2.9.5 1.1l8.6-8.6L4.2 3.4Zm9.6 9.6-2.2 2.2 5.5 3.1c.8.5 1.8-.1 1.8-1V6.7c0-.9-1-1.5-1.8-1l-5.5 3.1 2.2 2.2 1.4-1.4 1.1 1.1-1.4 1.3 1.4 1.4-1.1 1.1-1.4-1.5ZM5.4 21l8.1-4.6-2.6-2.6L5.4 21Zm0-18 5.5 7.2 2.6-2.6L5.4 3Z" />
+              </svg>
+              <span>
+                <small>Get it on</small>
+                Google Play
+              </span>
+            </a>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
